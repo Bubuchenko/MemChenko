@@ -1,0 +1,5 @@
+G:\Users\Alyssa\Documents\GitHub\MemChenko\ClassLibrary1\MemChenko\bin\Debug\MemChenko.dll
+G:\Users\Alyssa\Documents\GitHub\MemChenko\ClassLibrary1\MemChenko\bin\Debug\MemChenko.pdb
+G:\Users\Alyssa\Documents\GitHub\MemChenko\ClassLibrary1\MemChenko\obj\Debug\MemChenko.csprojResolveAssemblyReference.cache
+G:\Users\Alyssa\Documents\GitHub\MemChenko\ClassLibrary1\MemChenko\obj\Debug\MemChenko.dll
+G:\Users\Alyssa\Documents\GitHub\MemChenko\ClassLibrary1\MemChenko\obj\Debug\MemChenko.pdb
