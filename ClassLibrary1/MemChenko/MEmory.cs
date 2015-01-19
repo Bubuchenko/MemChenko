@@ -44,29 +44,29 @@ namespace MemChenko
             return false;
         }
 
-        public int BaseAddress()
+        public int BaseAddress
         {
-            return OpenedProcess.MainModule.BaseAddress.ToInt32();
+            get { return OpenedProcess.MainModule.BaseAddress.ToInt32(); }
         }
         
-        public int EntryPoint()
+        public int EntryPoint
         {
-            return OpenedProcess.MainModule.EntryPointAddress.ToInt32();
+            get { return OpenedProcess.MainModule.EntryPointAddress.ToInt32(); }
         }
 
-        public string Name()
+        public string Name
         {
-            return OpenedProcess.ProcessName;
+            get { return OpenedProcess.ProcessName; }
         }
 
-        public int PID()
+        public int PID
         {
-            return OpenedProcess.Id;
+            get { return OpenedProcess.Id; }
         }
 
-        public string StartTime()
+        public string StartTime
         {
-            return OpenedProcess.StartTime.ToString();
+            get { return OpenedProcess.StartTime.ToString(); }
         }
 
 
