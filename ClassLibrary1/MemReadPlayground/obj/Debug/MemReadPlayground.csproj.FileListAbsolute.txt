@@ -1,0 +1,11 @@
+G:\Users\Alyssa\Documents\GitHub\MemChenko\ClassLibrary1\MemReadPlayground\bin\Debug\MemReadPlayground.exe.config
+G:\Users\Alyssa\Documents\GitHub\MemChenko\ClassLibrary1\MemReadPlayground\bin\Debug\MemReadPlayground.exe
+G:\Users\Alyssa\Documents\GitHub\MemChenko\ClassLibrary1\MemReadPlayground\bin\Debug\MemReadPlayground.pdb
+G:\Users\Alyssa\Documents\GitHub\MemChenko\ClassLibrary1\MemReadPlayground\bin\Debug\MemChenko.dll
+G:\Users\Alyssa\Documents\GitHub\MemChenko\ClassLibrary1\MemReadPlayground\bin\Debug\MemChenko.pdb
+G:\Users\Alyssa\Documents\GitHub\MemChenko\ClassLibrary1\MemReadPlayground\obj\Debug\MemReadPlayground.csprojResolveAssemblyReference.cache
+G:\Users\Alyssa\Documents\GitHub\MemChenko\ClassLibrary1\MemReadPlayground\obj\Debug\MemReadPlayground.Form1.resources
+G:\Users\Alyssa\Documents\GitHub\MemChenko\ClassLibrary1\MemReadPlayground\obj\Debug\MemReadPlayground.Properties.Resources.resources
+G:\Users\Alyssa\Documents\GitHub\MemChenko\ClassLibrary1\MemReadPlayground\obj\Debug\MemReadPlayground.csproj.GenerateResource.Cache
+G:\Users\Alyssa\Documents\GitHub\MemChenko\ClassLibrary1\MemReadPlayground\obj\Debug\MemReadPlayground.exe
+G:\Users\Alyssa\Documents\GitHub\MemChenko\ClassLibrary1\MemReadPlayground\obj\Debug\MemReadPlayground.pdb

@@ -1,0 +1,9 @@
+G:\Users\Alyssa\Documents\GitHub\MemChenko\ClassLibrary1\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe.config
+G:\Users\Alyssa\Documents\GitHub\MemChenko\ClassLibrary1\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe
+G:\Users\Alyssa\Documents\GitHub\MemChenko\ClassLibrary1\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.pdb
+G:\Users\Alyssa\Documents\GitHub\MemChenko\ClassLibrary1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csprojResolveAssemblyReference.cache
+G:\Users\Alyssa\Documents\GitHub\MemChenko\ClassLibrary1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Form1.resources
+G:\Users\Alyssa\Documents\GitHub\MemChenko\ClassLibrary1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Properties.Resources.resources
+G:\Users\Alyssa\Documents\GitHub\MemChenko\ClassLibrary1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csproj.GenerateResource.Cache
+G:\Users\Alyssa\Documents\GitHub\MemChenko\ClassLibrary1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
+G:\Users\Alyssa\Documents\GitHub\MemChenko\ClassLibrary1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
