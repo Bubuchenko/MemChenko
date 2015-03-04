@@ -11,13 +11,10 @@ namespace MemChenko
     public class Memory
     {
         public Process OpenedProcess { get; set; }
-
         public IntPtr OpenedProcessHandle
         {
             get { return OpenedProcess.Handle; }
         }
-
-
         public bool OpenProcess(string ProcessName)
         {
             Process processName = Process.GetProcessesByName(ProcessName).FirstOrDefault();
@@ -30,7 +27,6 @@ namespace MemChenko
 
             return false;
         }
-
         public bool OpenProcess(int ProcessID)
         {
             Process processName = Process.GetProcessById(ProcessID);
@@ -43,130 +39,213 @@ namespace MemChenko
 
             return false;
         }
-
         public int BaseAddress
         {
             get { return OpenedProcess.MainModule.BaseAddress.ToInt32(); }
         }
-        
         public int EntryPoint
         {
             get { return OpenedProcess.MainModule.EntryPointAddress.ToInt32(); }
         }
-
         public string Name
         {
             get { return OpenedProcess.ProcessName; }
         }
-
         public int PID
         {
             get { return OpenedProcess.Id; }
         }
-
         public string StartTime
         {
             get { return OpenedProcess.StartTime.ToString(); }
         }
-
-
-        public int ConvertToDecimal(int iHex)
+        public static int ConvertToDecimal(int iHex)
         {
             return int.Parse(iHex.ToString(), NumberStyles.HexNumber);
         }
-        public int ConvertToDecimal(string sHex)
+        public static int ConvertToDecimal(string sHex)
         {
             return int.Parse(sHex, NumberStyles.HexNumber);
         }
-
         private string CreateAddress(byte[] Bytes)
         {
-            string str = "";
-            for (int i = 0; i < Bytes.Length; i++)
-            {
-                if (Convert.ToInt16(Bytes[i]) < 10)
-                {
-                    str = "0" + Bytes[i].ToString("X") + str;
-                }
-                else
-                {
-                    str = Bytes[i].ToString("X") + str;
-                }
-            }
-            return str;
+            Array.Reverse(Bytes);
+            return BitConverter.ToString(Bytes).Replace("-", string.Empty);
         }
-
-        private int CalculatePointer(int iMemoryAddress, int[] iOffsets)
+        public int CalculatePointer(int MemoryAddress, int[] Offsets)
         {
-            int num = iOffsets.Length - 1;
-            byte[] bBuffer = new byte[4];
-            int num2 = 0;
-            if (num == 0)
+            byte[] buffer = new byte[4];
+            IntPtr ptr;
+
+            int Address = BaseAddress + MemoryAddress;
+
+            for(int i = 0; i < Offsets.Length; i++)
             {
-                num2 = iMemoryAddress;
+                MemBase.ReadProcessMemory(OpenedProcessHandle, (IntPtr)Address, buffer, sizeof(int), out ptr);
+                Address = ConvertToDecimal(CreateAddress(buffer));
+                
+                Address += Offsets[i];
             }
-            for (int i = 0; i <= num; i++)
-            {
-                IntPtr ptr;
-                if (i == num)
-                {
-                    MemBase.ReadProcessMemory(OpenedProcessHandle, (IntPtr)num2, bBuffer, 4, out ptr);
-                    return (ConvertToDecimal(CreateAddress(bBuffer)) + iOffsets[i]);
-                }
-                if (i == 0)
-                {
-                    MemBase.ReadProcessMemory(OpenedProcessHandle, (IntPtr)iMemoryAddress, bBuffer, 4, out ptr);
-                    num2 = ConvertToDecimal(CreateAddress(bBuffer)) + iOffsets[0];
-                }
-                else
-                {
-                    MemBase.ReadProcessMemory(OpenedProcessHandle, (IntPtr)num2, bBuffer, 4, out ptr);
-                    num2 = ConvertToDecimal(CreateAddress(bBuffer)) + iOffsets[i];
-                }
-            }
-            return 0;
+
+            return Address;
         }
-
- 
-
 
         public string ReadString(int MemoryAddress, uint TextLength, TextEncoding TextEncodingType = TextEncoding.ASCII)
         {
             IntPtr ptr;
-            byte[] Buffer = new byte[TextLength];
-            MemBase.ReadProcessMemory(OpenedProcessHandle, (IntPtr)MemoryAddress, Buffer, TextLength, out ptr);
+            byte[] value = new byte[TextLength];
+            MemBase.ReadProcessMemory(OpenedProcessHandle, (IntPtr)MemoryAddress, value, TextLength, out ptr);
 
             switch(TextEncodingType)
             {
                 case TextEncoding.ASCII:
-                    return Encoding.ASCII.GetString(Buffer);
+                    return Encoding.ASCII.GetString(value);
                 case TextEncoding.UTF8:
-                    return Encoding.UTF8.GetString(Buffer);
+                    return Encoding.UTF8.GetString(value);
                 case TextEncoding.UNICODE:
-                    return Encoding.Unicode.GetString(Buffer);
+                    return Encoding.Unicode.GetString(value);
                 default:
-                    return Encoding.ASCII.GetString(Buffer);
+                    return Encoding.ASCII.GetString(value);
+            }
+        }
+        public string ReadString(int MemoryAddress, int[] Offsets, int StringLength, TextEncoding TextEncodingType = TextEncoding.ASCII)
+        {
+            IntPtr ptr;
+            int NewAddress = CalculatePointer(MemoryAddress, Offsets);
+            byte[] value = new byte[StringLength];
+            MemBase.ReadProcessMemory(OpenedProcessHandle, (IntPtr)NewAddress, value, (uint)StringLength, out ptr);
+
+            switch(TextEncodingType)
+            {
+                case TextEncoding.ASCII:
+                    return Encoding.ASCII.GetString(value);
+                case TextEncoding.UTF8:
+                    return Encoding.UTF8.GetString(value);
+                case TextEncoding.UNICODE:
+                    return Encoding.Unicode.GetString(value);
+                default:
+                    return Encoding.ASCII.GetString(value);
             }
         }
 
-        public string ReadString(int MemoryAddress, int[] Offsets, uint StringLength, TextEncoding TextEncodingType = TextEncoding.ASCII)
+        public int ReadInt32(int MemoryAddress, int[] Offsets)
         {
             IntPtr ptr;
-            int num = CalculatePointer(MemoryAddress, Offsets);
-            byte[] Buffer = new byte[1];
-            MemBase.ReadProcessMemory(OpenedProcessHandle, (IntPtr)MemoryAddress, Buffer, StringLength, out ptr);
+            int NewAddress = CalculatePointer(MemoryAddress, Offsets);
+            byte[] value = new byte[sizeof(Int32)];
+            MemBase.ReadProcessMemory(OpenedProcessHandle, (IntPtr)NewAddress, value, (uint)sizeof(Int32), out ptr);
 
-            switch(TextEncodingType)
-            {
-                case TextEncoding.ASCII:
-                    return Encoding.ASCII.GetString(Buffer);
-                case TextEncoding.UTF8:
-                    return Encoding.UTF8.GetString(Buffer);
-                case TextEncoding.UNICODE:
-                    return Encoding.Unicode.GetString(Buffer);
-                default:
-                    return Encoding.ASCII.GetString(Buffer);
-            }
+            if (!BitConverter.IsLittleEndian)
+                Array.Reverse(value);
+
+            return BitConverter.ToInt32(value, 0);
+        }
+        public int ReadInt32(int MemoryAddress)
+        {
+            IntPtr ptr;
+            byte[] value = new byte[sizeof(Int32)];
+            MemBase.ReadProcessMemory(OpenedProcessHandle, (IntPtr)MemoryAddress, value, (uint)sizeof(Int32), out ptr);
+
+            if (!BitConverter.IsLittleEndian)
+                Array.Reverse(value);
+
+            return BitConverter.ToInt32(value, 0);
+        }
+
+        public bool WriteInt32(int MemoryAddress, int Value)
+        {
+            IntPtr ptr;
+            byte[] bytes = BitConverter.GetBytes(Value);
+            MemBase.WriteProcessMemory(OpenedProcessHandle, (IntPtr)MemoryAddress, bytes, sizeof(Int32), out ptr);
+            return (ptr.ToInt32() == sizeof(Int32));
+        }
+        public bool WriteInt32(int MemoryAddress, int[] Offsets, int Value)
+        {
+            IntPtr ptr;
+            int newAddress = CalculatePointer(MemoryAddress, Offsets);
+            byte[] bytes = BitConverter.GetBytes(Value);
+            MemBase.WriteProcessMemory(OpenedProcessHandle, (IntPtr)newAddress, bytes, sizeof(Int32), out ptr);
+            return (ptr.ToInt32() == sizeof(Int32));
+        }
+
+        public float ReadFloat(int MemoryAddress, int[] Offsets)
+        {
+            IntPtr ptr;
+            int NewAddress = CalculatePointer(MemoryAddress, Offsets);
+            byte[] value = new byte[sizeof(float)];
+            MemBase.ReadProcessMemory(OpenedProcessHandle, (IntPtr)NewAddress, value, (uint)sizeof(Int32), out ptr);
+
+            if (!BitConverter.IsLittleEndian)
+                Array.Reverse(value);
+
+            return BitConverter.ToSingle(value, 0);
+        }
+        public float ReadFloat(int MemoryAddress)
+        {
+            IntPtr ptr;
+            byte[] value = new byte[sizeof(float)];
+            MemBase.ReadProcessMemory(OpenedProcessHandle, (IntPtr)MemoryAddress, value, (uint)sizeof(Int32), out ptr);
+
+            if (!BitConverter.IsLittleEndian)
+                Array.Reverse(value);
+
+            return BitConverter.ToSingle(value, 0);
+        }
+
+        public bool WriteFloat(int MemoryAddress, float Value)
+        {
+            IntPtr ptr;
+            byte[] bytes = BitConverter.GetBytes(Value);
+            MemBase.WriteProcessMemory(OpenedProcessHandle, (IntPtr)MemoryAddress, bytes, sizeof(float), out ptr);
+            return (ptr.ToInt32() == sizeof(float));
+        }
+        public bool WriteFloat(int MemoryAddress, int[] Offsets, float Value)
+        {
+            IntPtr ptr;
+            int newAddress = CalculatePointer(MemoryAddress, Offsets);
+            byte[] bytes = BitConverter.GetBytes(Value);
+            MemBase.WriteProcessMemory(OpenedProcessHandle, (IntPtr)newAddress, bytes, sizeof(float), out ptr);
+            return (ptr.ToInt32() == sizeof(float));
+        }
+
+        public double ReadDouble(int MemoryAddress, int[] Offsets)
+        {
+            IntPtr ptr;
+            int NewAddress = CalculatePointer(MemoryAddress, Offsets);
+            byte[] value = new byte[sizeof(double)];
+            MemBase.ReadProcessMemory(OpenedProcessHandle, (IntPtr)NewAddress, value, (uint)sizeof(double), out ptr);
+
+            if (!BitConverter.IsLittleEndian)
+                Array.Reverse(value);
+
+            return BitConverter.ToDouble(value, 0);
+        }
+        public double ReadDouble(int MemoryAddress)
+        {
+            IntPtr ptr;
+            byte[] value = new byte[sizeof(double)];
+            MemBase.ReadProcessMemory(OpenedProcessHandle, (IntPtr)MemoryAddress, value, (uint)sizeof(double), out ptr);
+
+            if (!BitConverter.IsLittleEndian)
+                Array.Reverse(value);
+
+            return BitConverter.ToDouble(value, 0);
+        }
+
+        public bool WriteDouble(int MemoryAddress, double Value)
+        {
+            IntPtr ptr;
+            byte[] bytes = BitConverter.GetBytes(Value);
+            MemBase.WriteProcessMemory(OpenedProcessHandle, (IntPtr)MemoryAddress, bytes, sizeof(double), out ptr);
+            return (ptr.ToInt32() == sizeof(double));
+        }
+        public bool WriteDouble(int MemoryAddress, int[] Offsets, double Value)
+        {
+            IntPtr ptr;
+            int newAddress = CalculatePointer(MemoryAddress, Offsets);
+            byte[] bytes = BitConverter.GetBytes(Value);
+            MemBase.WriteProcessMemory(OpenedProcessHandle, (IntPtr)newAddress, bytes, sizeof(double), out ptr);
+            return (ptr.ToInt32() == sizeof(double));
         }
 
         public enum TextEncoding
@@ -175,9 +254,5 @@ namespace MemChenko
             UNICODE,
             ASCII
         }
-
-        
- 
-
     }
 }

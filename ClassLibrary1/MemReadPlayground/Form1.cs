@@ -21,11 +21,13 @@ namespace MemReadPlayground
         private void button1_Click(object sender, EventArgs e)
         {
             Memory mem = new Memory();
-            mem.OpenProcess("steam");
+            mem.OpenProcess("DarkSoulsII");
 
-            string x = mem.ReadString(0x03308350, 20);
+            while(true)
+            {
+                mem.WriteInt32(0x11593F4, new int[3] { 0xcc4, 0xa0, 0x60 }, 99);
+            }
 
-            MessageBox.Show(x);
         }
     }
 }
